@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -587,6 +589,7 @@ public class Entrega2Tests {
 		assertEquals(15, msg.size());
 
 	}
+
 
 	private void loginAs(String email, String password) {
 		driver.findElement(By.xpath("//a[@href='/login']")).click();
