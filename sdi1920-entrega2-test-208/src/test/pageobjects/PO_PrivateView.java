@@ -19,10 +19,9 @@ public class PO_PrivateView extends PO_NavView {
 	public static void goToPage(WebDriver driver, int page) {
 		// find page buttons
 		List<WebElement> elements = SeleniumUtils.EsperaCargaPagina(driver, "@href", "?pg=", PO_View.getTimeout());
-		elements.remove(0); // remove "first"
-		elements.remove(elements.size() - 1); // remove "last"
+		
 		// click corresponding one
-		elements.get(page).click();
+		elements.get(page-1).click();
 	}
 
 	/**
@@ -96,7 +95,7 @@ public class PO_PrivateView extends PO_NavView {
 		List<WebElement> elements;
 		// for each page count number of users
 		for (int i = 0; i < numOfPages; i++) {
-			PO_PrivateView.goToPage(driver, i);
+			PO_PrivateView.goToPage(driver, i+1);
 			elements = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
 			count += elements.size();
 		}
@@ -112,7 +111,7 @@ public class PO_PrivateView extends PO_NavView {
 	public static int getNumOfPages(WebDriver driver) {
 		// find page buttons
 		List<WebElement> elements = SeleniumUtils.EsperaCargaPagina(driver, "@href", "?pg=", PO_View.getTimeout());
-		return elements.size() - 2; // take into account first and last shouldn't be counted
+		return elements.size() ; // take into account first and last shouldn't be counted
 	}
 
 	/**

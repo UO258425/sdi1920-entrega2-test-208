@@ -321,7 +321,7 @@ public class Entrega2Tests {
 		PO_PrivateView.goToPage(driver, 2);
 		
 		//envia invitacion a nombre7
-		driver.findElement(By.xpath("/invitacion/enviar/5e9991e19315110378d714fc']")).click(); 
+		driver.findElement(By.id("nombre7")).click(); 
 		SeleniumUtils.textoPresentePagina(driver, "Invitacion enviada");
 		
 		gotoListInvitaciones();
@@ -346,7 +346,7 @@ public class Entrega2Tests {
 		PO_PrivateView.goToPage(driver, 2);
 		
 		//envia invitacion a nombre7
-		driver.findElement(By.xpath("/invitacion/enviar/5e9991e19315110378d714fc']")).click(); 
+		driver.findElement(By.id("nombre7")).click(); 
 		SeleniumUtils.textoPresentePagina(driver, "Error: ya hay una petición pendiente");
 		
 		disconect();
@@ -484,7 +484,7 @@ public class Entrega2Tests {
 		//List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
 		 List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
 
-		assertEquals(5, elements.size());
+		assertEquals(6, elements.size());
 
 	}
 	
