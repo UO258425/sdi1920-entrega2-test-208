@@ -8,8 +8,8 @@ import org.openqa.selenium.WebElement;
 
 import test.utils.SeleniumUtils;
 
-public class PO_PrivateView extends PO_NavView{
-	
+public class PO_PrivateView extends PO_NavView {
+
 	/**
 	 * navigates to selected page
 	 * 
@@ -24,7 +24,6 @@ public class PO_PrivateView extends PO_NavView{
 		// click corresponding one
 		elements.get(page).click();
 	}
-	
 
 	/**
 	 * logout of the system
@@ -35,7 +34,6 @@ public class PO_PrivateView extends PO_NavView{
 		clickOption(driver, "logout", "class", "btn btn-primary");
 	}
 
-
 	/**
 	 * searches in the user list for the input searchText
 	 * 
@@ -44,17 +42,46 @@ public class PO_PrivateView extends PO_NavView{
 	 */
 	public static void searchInUsersList(WebDriver driver, String searchText) {
 		// find the search input
-				WebElement toSearch = driver.findElement(By.name("busqueda"));
-				// find the search button
-				WebElement btnSearch = driver.findElement(By.className("btn"));
-				// fill the search input with the text to search
-				toSearch.click();
-				toSearch.clear();
-				toSearch.sendKeys(searchText);
-				// press the search button
-				btnSearch.click();		
+		WebElement toSearch = driver.findElement(By.name("busqueda"));
+		// find the search button
+		WebElement btnSearch = driver.findElement(By.className("btn"));
+		// fill the search input with the text to search
+		toSearch.click();
+		toSearch.clear();
+		toSearch.sendKeys(searchText);
+		// press the search button
+		btnSearch.click();
 	}
 
+	/**
+	 * searches in the user list for the input searchText
+	 * 
+	 * @param driver
+	 * @param searchText
+	 */
+	public static void searchInUsersListCliente(WebDriver driver, String searchText) {
+		// find the search input
+		WebElement toSearch = driver.findElement(By.id("filtro-nombre"));
+		// fill the search input with the text to search
+		toSearch.click();
+		toSearch.clear();
+		toSearch.sendKeys(searchText);
+	}
+
+	/**
+	 * writes a text message in a chat
+	 * 
+	 * @param driver
+	 * @param searchText
+	 */
+	public static void sendMessage(WebDriver driver, String messageText) {
+		WebElement text = driver.findElement(By.id("input-mensaje"));
+		WebElement btnSend = driver.findElement(By.id("btn-enviar"));
+		text.click();
+		text.clear();
+		text.sendKeys(messageText);
+		btnSend.click();
+	}
 
 	/**
 	 * counts the total number of elements in all pages
@@ -75,7 +102,7 @@ public class PO_PrivateView extends PO_NavView{
 		}
 		return count;
 	}
-	
+
 	/**
 	 * returns the number of current pages
 	 * 
@@ -98,7 +125,5 @@ public class PO_PrivateView extends PO_NavView{
 		By element = By.xpath("//tbody/tr");
 		return driver.findElements(element);
 	}
-	
-	
 
 }

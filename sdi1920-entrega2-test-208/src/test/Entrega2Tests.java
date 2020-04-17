@@ -1,9 +1,11 @@
 package test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.runners.MethodSorters;
 import org.junit.After;
@@ -16,6 +18,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Sleeper;
 
 import test.pageobjects.PO_LoginView;
 import test.pageobjects.PO_PrivateView;
@@ -72,7 +75,7 @@ public class Entrega2Tests {
 		driver.findElement(By.xpath("//a[@href='/signin']")).click();
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "prueba12@prueba12", "nombre12", "apellidos12", "prueba12", "prueba12");
-		//PO_View.checkElement(driver, "text", "Nuevo usuario registrado");
+		// PO_View.checkElement(driver, "text", "Nuevo usuario registrado");
 		SeleniumUtils.textoPresentePagina(driver, "Nuevo usuario registrado");
 	}
 
@@ -87,17 +90,18 @@ public class Entrega2Tests {
 
 		PO_RegisterView.fillForm(driver, "", "TestName", "TestSurname", "123456", "123456");
 		// COmprobamos el error de email vacio.
-		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: email vacio");
+		// PO_RegisterView.checkKey(driver, "Error al registrar usuario: email vacio");
 		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: email vacio");
-		
+
 		PO_RegisterView.fillForm(driver, "user123123@email.com", "", "Perez", "77777", "77777");
 		// COmprobamos el error de Nombre corto .
-		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: nombre vacio");
+		// PO_RegisterView.checkKey(driver, "Error al registrar usuario: nombre vacio");
 		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: nombre vacio");
-		
+
 		PO_RegisterView.fillForm(driver, "user123123@email.com", "nombre", "", "77777", "77777");
 		// COmprobamos el error de Nombre corto .
-		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: apellidos vacios");
+		// PO_RegisterView.checkKey(driver, "Error al registrar usuario: apellidos
+		// vacios");
 		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: apellidos vacios");
 	}
 
@@ -111,7 +115,8 @@ public class Entrega2Tests {
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "user123@email.com", "TestName", "TestSurname", "123456", "1");
 		// COmprobamos el error de contraseña invalida
-		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: las contraseñas no coinciden");
+		// PO_RegisterView.checkKey(driver, "Error al registrar usuario: las contraseñas
+		// no coinciden");
 		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: las contraseñas no coinciden");
 
 	}
@@ -126,7 +131,8 @@ public class Entrega2Tests {
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "prueba1@prueba1", "TestName", "TestSurname", "123456", "123456");
 		// COmprobamos el error de DNI repetido.
-		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: No puede registrarse con ese email");
+		// PO_RegisterView.checkKey(driver, "Error al registrar usuario: No puede
+		// registrarse con ese email");
 		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: No puede registrarse con ese email");
 
 	}
@@ -149,12 +155,14 @@ public class Entrega2Tests {
 
 		PO_LoginView.fillForm(driver, "", "123456");
 		// Comprobamos que se muestra el error
-		//PO_RegisterView.checkKey(driver, "Error al identificar usuario: email vacio");
+		// PO_RegisterView.checkKey(driver, "Error al identificar usuario: email
+		// vacio");
 		SeleniumUtils.textoPresentePagina(driver, "Error al identificar usuario: email vacio");
 
 		PO_LoginView.fillForm(driver, "user1@email.com", "");
 		// Comprobamos que se muestra el error
-		//PO_RegisterView.checkKey(driver, "Error al identificar usuario: contraseña vacia");
+		// PO_RegisterView.checkKey(driver, "Error al identificar usuario: contraseña
+		// vacia");
 		SeleniumUtils.textoPresentePagina(driver, "Error al identificar usuario: contraseña vacia");
 
 	}
@@ -169,7 +177,7 @@ public class Entrega2Tests {
 		// Rellenamos el formulario
 		PO_LoginView.fillForm(driver, "prueba1@prueba1", "123456234234");
 		// Comprobamos que se muestra el error
-		//PO_RegisterView.checkKey(driver, "Email o password incorrecto");
+		// PO_RegisterView.checkKey(driver, "Email o password incorrecto");
 		SeleniumUtils.textoPresentePagina(driver, "Email o password incorrecto");
 
 	}
@@ -185,7 +193,7 @@ public class Entrega2Tests {
 		// Rellenamos el formulario
 		PO_LoginView.fillForm(driver, "user1@email.com", "123456234234");
 		// Comprobamos que se muestra el error
-		//PO_RegisterView.checkKey(driver, "Email o password incorrecto");
+		// PO_RegisterView.checkKey(driver, "Email o password incorrecto");
 		SeleniumUtils.textoPresentePagina(driver, "Email o password incorrecto");
 
 	}
@@ -201,8 +209,6 @@ public class Entrega2Tests {
 		disconect();
 
 	}
-
-
 
 	/**
 	 * Fin de sesion Comprobar que el botón cerrar sesion no está visible si el
@@ -223,10 +229,10 @@ public class Entrega2Tests {
 		loginAs("prueba1@prueba1", "prueba1");
 
 		goToListUsers();
-		
+
 		int numOfUsers = PO_PrivateView.getTotalNumOfElements(driver);
 		assertEquals(12, numOfUsers);
-		
+
 //		List<WebElement> usuarios = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
 //		assertEquals(usuarios.size(), 4);
 //		driver.navigate().to(URL + "/usuarios?pg=2");
@@ -282,22 +288,22 @@ public class Entrega2Tests {
 	public void PR14() {
 		loginAs("prueba1@prueba1", "prueba1");
 		goToListUsers();
-		
+
 		// search a name that exists
 		PO_PrivateView.searchInUsersList(driver, "nombre11");
 		List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(1, users.size());
-		
+
 		// search a surname that exists
 		PO_PrivateView.searchInUsersList(driver, "apellidos11");
 		users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(1, users.size());
-		
+
 		// search valid email
 		PO_PrivateView.searchInUsersList(driver, "prueba11@prueba11");
 		users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(1, users.size());
-		
+
 		disconect();
 
 	}
@@ -341,13 +347,154 @@ public class Entrega2Tests {
 		assertEquals(currentURL, "https://localhost:8081/login");
 	}
 
+	/**
+	 * Inicio de sesión con datos válidos.
+	 * @throws InterruptedException 
+	 *
+	 */
+	@Test
+	public void PR23() throws InterruptedException {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		// Rellenamos el formulario.
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		//TimeUnit.MILLISECONDS.sleep(500);
+		PO_View.checkElement(driver, "text", "nombre2");
 
+		//SeleniumUtils.textoPresentePagina(driver, "nombre2");
+
+	}
+
+	/**
+	 * Inicio de sesión con datos inválidos (usuario no existente en la aplicación).
+	 *
+	 */
+	@Test
+	public void PR24() {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		// Rellenamos el formulario.
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "asdfasdf");
+		SeleniumUtils.textoPresentePagina(driver, "Autenticación fallida");
+	}
+
+	
+	/**
+	 * Acceder a la lista de amigos de un usuario, que al menos tenga tres amigos.
+	 * @throws InterruptedException 
+	 *
+	 */
+	@Test
+	public void PR25() throws InterruptedException {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		TimeUnit.MILLISECONDS.sleep(500);
+
+		//List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
+		 List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
+
+		assertEquals(5, elements.size());
+
+	}
+	
+	/**
+	 * Acceder a la lista de amigos de un usuario, y realizar un filtrado para encontrar a 
+	 * un amigo concreto, el nombre a buscar debe coincidir con el de un amigo.
+	 *
+	 */
+	@Test
+	public void PR26() {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		
+		//PO_PrivateView.searchInUsersListCliente(driver, "nombre2");
+		
+		//WebElement toSearch = SeleniumUtils.EsperaCargaPaginaxpathUnElemento(driver, "//input", 5);
+		 List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
+		 WebElement toSearch = elements.get(0);
+		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); 
+		toSearch.click();
+		toSearch.clear();
+		toSearch.sendKeys("nombre2");
+		
+		List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(1, users.size());
+
+	}
+	
+	/**
+	 * Acceder  a  la  lista  de  mensajes  de  un  amigo “chat”,  
+	 * la  lista  debe  contener  almenos  tres mensajes.
+	 * @throws InterruptedException 
+	 *
+	 */
+	@Test
+	public void PR27() throws InterruptedException {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		
+		SeleniumUtils.EsperaCargaPaginaxpathUnElemento(driver, "//a[text()='nombre2']/@href", 5).click();
+
+		 TimeUnit.SECONDS.sleep(2); //messages take a while to load
+
+		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(13, msg.size());
+
+	}
+	
+	
+	/**
+	 *Acceder a la lista de mensajes de un amigo“chat” 
+	 *y crear un nuevo mensaje, validar que el mensaje aparece en la lista de mensajes
+	 *
+	 */
+	@Test
+	public void PR28() throws InterruptedException {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		
+		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
+		 TimeUnit.SECONDS.sleep(1); //messages take a while to load
+
+		 PO_PrivateView.sendMessage(driver, "nuevo mensaje de prueba");
+		 TimeUnit.SECONDS.sleep(1); //messages take a while to load
+
+		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
+		 
+		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(14, msg.size());
+
+	}
+	
+	
+	/**
+	 *Acceder a la lista de mensajes de un amigo“chat” 
+	 *y crear un nuevo mensaje, validar que el mensaje aparece en la lista de mensajes
+	 *
+	 *Se comprueba en el otro participante de la conversacion que el mensaje aparece
+	 *
+	 */
+	@Test
+	public void PR29() throws InterruptedException {
+		driver.navigate().to("https://localhost:8081/cliente.html");
+		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
+		
+		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
+		 TimeUnit.SECONDS.sleep(2); //messages take a while to load
+
+		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
+		 
+		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(14, msg.size());
+
+	}
+	
+	
+	
 	private void loginAs(String email, String password) {
 		driver.findElement(By.xpath("//a[@href='/login']")).click();
 		// Rellenamos el formulario
 		PO_LoginView.fillForm(driver, email, password);
 		// COmprobamos que entramos en la pagina privada de Alumno
-		//PO_View.checkElement(driver, "text", "Bienvenido a My SocialNetwork!");
+		// PO_View.checkElement(driver, "text", "Bienvenido a My SocialNetwork!");
 		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a My SocialNetwork!");
 
 	}
@@ -355,13 +502,13 @@ public class Entrega2Tests {
 	private void goToListUsers() {
 		driver.findElement(By.xpath("//a[@href='/usuarios']")).click();
 	}
-	
+
 	private void disconect() {
 		driver.findElement(By.xpath("//a[@href='/logout']")).click();
-		//PO_View.checkKey(driver, "Usuario desconectado");
+		// PO_View.checkKey(driver, "Usuario desconectado");
 		SeleniumUtils.textoPresentePagina(driver, "Usuario desconectado");
 
-		//PO_View.checkKey(driver, "Identificación de usuario");
+		// PO_View.checkKey(driver, "Identificación de usuario");
 		SeleniumUtils.textoPresentePagina(driver, "Identificación de usuario");
 
 	}

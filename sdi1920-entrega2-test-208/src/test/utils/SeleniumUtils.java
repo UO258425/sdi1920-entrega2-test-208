@@ -67,6 +67,16 @@ public class SeleniumUtils {
 		return elementos;					
 	}
 
+	static public WebElement EsperaCargaPaginaxpathUnElemento(WebDriver driver, String xpath, int timeout)
+	{
+		WebElement resultado = 
+				(new WebDriverWait(driver, timeout)).until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
+		assertTrue(resultado != null);
+		WebElement elemento = driver.findElement(By.xpath(xpath));
+
+		return elemento;					
+	}
+	
 	/**
 	 * Espera por la visibilidad de un elemento/s en la vista actualmente cargandose en driver. Para ello se empleará una consulta xpath 
 	 * según varios criterios..
