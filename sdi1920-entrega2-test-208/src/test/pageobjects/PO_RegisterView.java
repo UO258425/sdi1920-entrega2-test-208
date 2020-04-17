@@ -24,7 +24,7 @@ public class PO_RegisterView extends PO_NavView {
 		password.click();
 		password.clear();
 		password.sendKeys(passwordp);
-		WebElement passwordConfirm = driver.findElement(By.name("passwordConfirm"));
+		WebElement passwordConfirm = driver.findElement(By.name("passwordConfirmation"));
 		passwordConfirm.click();
 		passwordConfirm.clear();
 		passwordConfirm.sendKeys(passwordconfp);

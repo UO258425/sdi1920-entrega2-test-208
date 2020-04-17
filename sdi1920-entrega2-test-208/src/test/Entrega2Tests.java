@@ -3,6 +3,7 @@ package test;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.List;
 
 import org.junit.runners.MethodSorters;
 import org.junit.After;
@@ -11,11 +12,13 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import test.pageobjects.PO_HomeView;
 import test.pageobjects.PO_LoginView;
+import test.pageobjects.PO_PrivateView;
 import test.pageobjects.PO_RegisterView;
 import test.pageobjects.PO_View;
 import test.utils.SeleniumUtils;
@@ -27,15 +30,15 @@ public class Entrega2Tests {
 	static String Geckdriver024 = new File("drivers/geckodriver024win64.exe").getAbsolutePath();
 
 	static WebDriver driver = getDriver(PathFirefox65, Geckdriver024);
-	static String URL = "http://localhost:8081";
-	
+	static String URL = "https://localhost:8081";
+
 	public static WebDriver getDriver(String PathFirefox, String Geckdriver) {
 		System.setProperty("webdriver.firefox.bin", PathFirefox);
 		System.setProperty("webdriver.gecko.driver", Geckdriver);
 		WebDriver driver = new FirefoxDriver();
 		return driver;
 	}
-	
+
 	@Before
 	public void setUp() throws Exception {
 		// antes de cada prueba navega a la url home de la app
@@ -47,7 +50,7 @@ public class Entrega2Tests {
 		// despues de cada prueba se borran las cookies del navegador
 		driver.manage().deleteAllCookies();
 	}
-	
+
 	@BeforeClass
 	static public void begin() {
 
@@ -59,21 +62,19 @@ public class Entrega2Tests {
 		// cerramos el navegador al finalizar las pruebas
 		driver.quit();
 	}
-	
+
 	/**
 	 * Registro de usuario con datos válidos
 	 */
 	@Test
 	public void PR01() {
 		// Vamos al formulario de registro
-		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/signin']")).click();
 		// Rellenamos el formulario.
-		PO_RegisterView.fillForm(driver, "user8@email.com", "TestName", "TestSurname", "123456", "123456");
-		// Comprobamos que entramos en la sección privada
-		PO_View.checkElement(driver, "text", "Bienvenidos a la página principal");
+		PO_RegisterView.fillForm(driver, "prueba12@prueba12", "nombre12", "apellidos12", "prueba12", "prueba12");
+		//PO_View.checkElement(driver, "text", "Nuevo usuario registrado");
+		SeleniumUtils.textoPresentePagina(driver, "Nuevo usuario registrado");
 	}
-	
-	
 
 	/**
 	 * Registro de usuario con datos inválidos email vacio, nombre vacio, apellidos
@@ -82,36 +83,38 @@ public class Entrega2Tests {
 	@Test
 	public void PR02() {
 		// Vamos al formulario de registro
-		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/signin']")).click();
 
 		PO_RegisterView.fillForm(driver, "", "TestName", "TestSurname", "123456", "123456");
 		// COmprobamos el error de email vacio.
-		PO_RegisterView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
-
+		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: email vacio");
+		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: email vacio");
+		
 		PO_RegisterView.fillForm(driver, "user123123@email.com", "", "Perez", "77777", "77777");
 		// COmprobamos el error de Nombre corto .
-		PO_RegisterView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
-
+		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: nombre vacio");
+		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: nombre vacio");
+		
 		PO_RegisterView.fillForm(driver, "user123123@email.com", "nombre", "", "77777", "77777");
 		// COmprobamos el error de Nombre corto .
-		PO_RegisterView.checkKey(driver, "Error.empty", PO_Properties.getSPANISH());
-
+		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: apellidos vacios");
+		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: apellidos vacios");
 	}
-	
+
 	/**
 	 * Registro de usuario con datos inválidos repeticion de contraseña inválida
 	 */
 	@Test
 	public void PR03() {
 		// Vamos al formulario de registro
-		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/signin']")).click();
 		// Rellenamos el formulario.
 		PO_RegisterView.fillForm(driver, "user123@email.com", "TestName", "TestSurname", "123456", "1");
-		PO_View.getP();
 		// COmprobamos el error de contraseña invalida
-		PO_RegisterView.checkKey(driver, "Error.signup.passwordConfirm.coincidence", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: las contraseñas no coinciden");
+		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: las contraseñas no coinciden");
+
 	}
-	
 
 	/**
 	 * Registro de usuario con datos inválidos email existente
@@ -119,79 +122,88 @@ public class Entrega2Tests {
 	@Test
 	public void PR04() {
 		// Vamos al formulario de registro
-		PO_HomeView.clickOption(driver, "signup", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/signin']")).click();
 		// Rellenamos el formulario.
-		PO_RegisterView.fillForm(driver, "user1@email.com", "TestName", "TestSurname", "123456", "123456");
-		PO_View.getP();
+		PO_RegisterView.fillForm(driver, "prueba1@prueba1", "TestName", "TestSurname", "123456", "123456");
 		// COmprobamos el error de DNI repetido.
-		PO_RegisterView.checkKey(driver, "Error.signup.email.duplicate", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Error al registrar usuario: No puede registrarse con ese email");
+		SeleniumUtils.textoPresentePagina(driver, "Error al registrar usuario: No puede registrarse con ese email");
+
 	}
-	
 
 	/**
 	 * Inicio de sesion con datos validos (usuario estandar)
 	 */
 	@Test
 	public void PR05() {
-		loginStandardUser();
+		loginAs("prueba1@prueba1", "prueba1");
 	}
-	
+
 	/**
 	 * Inicio de sesion con datos invalidos usuario estandar, campo email y
 	 * contraseña vacios
 	 */
 	@Test
 	public void PR06() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/login']")).click();
 
 		PO_LoginView.fillForm(driver, "", "123456");
 		// Comprobamos que se muestra el error
-		PO_RegisterView.checkKey(driver, "login.error", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Error al identificar usuario: email vacio");
+		SeleniumUtils.textoPresentePagina(driver, "Error al identificar usuario: email vacio");
 
 		PO_LoginView.fillForm(driver, "user1@email.com", "");
 		// Comprobamos que se muestra el error
-		PO_RegisterView.checkKey(driver, "login.error", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Error al identificar usuario: contraseña vacia");
+		SeleniumUtils.textoPresentePagina(driver, "Error al identificar usuario: contraseña vacia");
+
 	}
-	
+
 	/**
 	 * Inicio de sesion con datos validos usuario estandar, email existente, pero
 	 * contraseña incorrecta
 	 */
 	@Test
 	public void PR07() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/login']")).click();
 		// Rellenamos el formulario
-		PO_LoginView.fillForm(driver, "user1@email.com", "123456234234");
+		PO_LoginView.fillForm(driver, "prueba1@prueba1", "123456234234");
 		// Comprobamos que se muestra el error
-		PO_RegisterView.checkKey(driver, "login.error", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Email o password incorrecto");
+		SeleniumUtils.textoPresentePagina(driver, "Email o password incorrecto");
+
 	}
-	
+
 	/**
-	 * Inicio de sesión con datos inválidos (usuario estándar, email no existentey contraseña no vacía).
+	 * Inicio de sesión con datos inválidos (usuario estándar, email no existentey
+	 * contraseña no vacía).
 	 * 
 	 */
 	@Test
 	public void PR08() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+		driver.findElement(By.xpath("//a[@href='/login']")).click();
 		// Rellenamos el formulario
 		PO_LoginView.fillForm(driver, "user1@email.com", "123456234234");
 		// Comprobamos que se muestra el error
-		PO_RegisterView.checkKey(driver, "login.error", PO_Properties.getSPANISH());
+		//PO_RegisterView.checkKey(driver, "Email o password incorrecto");
+		SeleniumUtils.textoPresentePagina(driver, "Email o password incorrecto");
+
 	}
-	
+
 	/**
 	 * Fin de sesion hacer click en la opcion de salir de sesion y comprobar que se
 	 * redirige a la pagina de inicio de sesion
 	 */
 	@Test
 	public void PR09() {
-		loginStandardUser();
+		loginAs("prueba1@prueba1", "prueba1");
 
-		PO_LoginView.clickOption(driver, "logout", "class", "btn btn-primary");
-		PO_View.checkKey(driver, "login.message", PO_Properties.getSPANISH());
+		disconect();
 
 	}
-	
+
+
+
 	/**
 	 * Fin de sesion Comprobar que el botón cerrar sesion no está visible si el
 	 * usuario no está autenticado
@@ -201,121 +213,95 @@ public class Entrega2Tests {
 		SeleniumUtils.textoNoPresentePagina(driver, "Desconectar");
 
 	}
-	
+
 	/**
 	 * Mostrar el listado de usuarios y comprobar que se muestran todos los que
 	 * existen en el sistema
 	 */
 	@Test
 	public void PR11() {
-		loginStandardUser();
+		loginAs("prueba1@prueba1", "prueba1");
 
 		goToListUsers();
+		
+		int numOfUsers = PO_PrivateView.getTotalNumOfElements(driver);
+		assertEquals(12, numOfUsers);
+		
+//		List<WebElement> usuarios = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
+//		assertEquals(usuarios.size(), 4);
+//		driver.navigate().to(URL + "/usuarios?pg=2");
+//		usuarios = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
+//		assertEquals(usuarios.size(), 4);
+//		driver.navigate().to(URL + "/usuarios?pg=3");
+//		usuarios = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
+//		assertEquals(usuarios.size(), 4);
 
-		List<WebElement> usuarios = SeleniumUtils.EsperaCargaPagina(driver, "free", "//tbody/tr", PO_View.getTimeout());
-		assertEquals(usuarios.size(), 5);
-
-		PO_PrivateView.clickOption(driver, "logout", "text", "Identifícate");
+		disconect();
 	}
-	
+
 	/**
-	 * Hacer  una  búsqueda  con  el  campo  vacío  y  comprobar  que  se  muestra  la  página  
+	 * Hacer una búsqueda con el campo vacío y comprobar que se muestra la página
 	 * que corresponde con el listado usuarios existentes en el sistema.
-    */
+	 */
 	@Test
 	public void PR12() {
-		// log in as standard user
-		loginStandardUser();
-		// navigate to users list
+		loginAs("prueba1@prueba1", "prueba1");
 		goToListUsers();
 		// search without any text
 		PO_PrivateView.searchInUsersList(driver, "");
 		// get the number of users
 		int numOfUsers = PO_PrivateView.getTotalNumOfElements(driver);
-		assertEquals(6, numOfUsers);
+		assertEquals(12, numOfUsers);
 
-		// logout
-		PO_PrivateView.logout(driver);
+		disconect();
 
-		// log in as admin
-		loginAdmin();
-		// navigate to users list
-		goToListUsers();
-		// search without any text
-		PO_PrivateView.searchInUsersList(driver, "");
-		// get the number of users
-		numOfUsers = PO_PrivateView.getTotalNumOfElements(driver);
-		assertEquals(8, numOfUsers);
 	}
-	
+
 	/**
-	 * Hacer  una  búsqueda  escribiendo  en  el  campo  un  texto  que  no  exista 
-	 *  y  comprobar  que  se muestra la página que corresponde, con la lista de usuarios vacía
+	 * Hacer una búsqueda escribiendo en el campo un texto que no exista y comprobar
+	 * que se muestra la página que corresponde, con la lista de usuarios vacía
 	 */
 	@Test
 	public void PR13() {
-		// login as standard user
-		loginStandardUser();
-		// go to list of users
+		loginAs("prueba1@prueba1", "prueba1");
 		goToListUsers();
-		// search with non-existing text
 		PO_PrivateView.searchInUsersList(driver, "noexisto");
 		// check no user shows up
 		List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(0, users.size());
 
-		// logout
-		PO_PrivateView.logout(driver);
-
-		// login as standard user
-		loginAdmin();
-		// go to list of users
-		goToListUsers();
-		// search with non-existing text
-		PO_PrivateView.searchInUsersList(driver, "noexisto");
-		// check no user shows up
-		users = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(0, users.size());
+		disconect();
 	}
-	
+
 	/**
-	 * Hacer  una  búsquedacon  un texto  específico y  comprobar  que  se 
-	 *  muestra  la  página  que corresponde, con la lista de usuarios en los
-	 *  que el textoespecificados sea parte de su nombre, apellidos o de su email.
+	 * Hacer una búsquedacon un texto específico y comprobar que se muestra la
+	 * página que corresponde, con la lista de usuarios en los que el
+	 * textoespecificados sea parte de su nombre, apellidos o de su email.
 	 */
 	@Test
 	public void PR14() {
-		// login as standard user
-		loginStandardUser();
-		// go to users list
+		loginAs("prueba1@prueba1", "prueba1");
 		goToListUsers();
+		
 		// search a name that exists
-		PO_PrivateView.searchInUsersList(driver, "ed");
-		// check pedro was returned
+		PO_PrivateView.searchInUsersList(driver, "nombre11");
 		List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(1, users.size());
+		
 		// search a surname that exists
-		PO_PrivateView.searchInUsersList(driver, "ez");
-		// check maria, pedro and lucas were returned
-		users = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(3, users.size());
-		// search valid email
-		PO_PrivateView.searchInUsersList(driver, "6");
-		// check that carlos is returned
+		PO_PrivateView.searchInUsersList(driver, "apellidos11");
 		users = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(1, users.size());
 		
+		// search valid email
+		PO_PrivateView.searchInUsersList(driver, "prueba11@prueba11");
+		users = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(1, users.size());
+		
+		disconect();
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * Intentar acceder sin estar autenticado a la opcion de listado de usuarios Se
 	 * debera volver al formulario de login
@@ -323,68 +309,60 @@ public class Entrega2Tests {
 	 */
 	@Test
 	public void PR20() {
-		driver.navigate().to("http://localhost:80810/user/list");
-		PO_View.checkElement(driver, "text", "Identifícate");
+		driver.navigate().to("https://localhost:8081/usuarios");
+		PO_View.checkElement(driver, "text", "Identificación de usuario");
 		String currentURL = driver.getCurrentUrl();
-		assertEquals(currentURL, "http://localhost:8090/login");
+		assertEquals(currentURL, "https://localhost:8081/login");
 	}
-	
+
 	/**
 	 * Intentar acceder sin estar autenticado a la opción de listado de invitaciones
-	 *  de amistad recibida de un usuario estándar. 
-	 *  Se deberá volver al formulario de login.
+	 * de amistad recibida de un usuario estándar. Se deberá volver al formulario de
+	 * login.
 	 */
 	@Test
 	public void PR21() {
-		driver.navigate().to("http://localhost:8081/invitaciones");
-		PO_View.checkElement(driver, "text", "Identifícate");
+		driver.navigate().to("https://localhost:8081/invitaciones");
+		PO_View.checkElement(driver, "text", "Identificación de usuario");
 		String currentURL = driver.getCurrentUrl();
-		assertEquals(currentURL, "http://localhost:8081/login");
+		assertEquals(currentURL, "https://localhost:8081/login");
 	}
-	
+
 	/**
-	 * Intentar  acceder estando  autenticado  como  usuario  standard  a
-	 *  la  lista  de  amigos  de  otro usuario. Se deberá mostrar un mensaje de acción indebida.
+	 * Intentar acceder estando autenticado como usuario standard a la lista de
+	 * amigos de otro usuario. Se deberá mostrar un mensaje de acción indebida.
 	 *
 	 */
 	@Test
 	public void PR22() {
-		driver.navigate().to("http://localhost:80810/user/list");
-		PO_View.checkElement(driver, "text", "Identifícate");
+		driver.navigate().to("https://localhost:8081/usuarios");
+		PO_View.checkElement(driver, "text", "Identificación de usuario");
 		String currentURL = driver.getCurrentUrl();
-		assertEquals(currentURL, "http://localhost:8090/login");
+		assertEquals(currentURL, "https://localhost:8081/login");
 	}
-	
-	
-	
-	
-	private void loginStandardUser() {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
-		// Rellenamos el formulario
-		PO_LoginView.fillForm(driver, "user1@email.com", "123456");
-		// COmprobamos que entramos en la pagina privada de Alumno
-		PO_View.checkElement(driver, "text", "Esta es una zona privada la web");
-	}
-	
 
-	private void loginAs(int userId) {
-		PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+
+	private void loginAs(String email, String password) {
+		driver.findElement(By.xpath("//a[@href='/login']")).click();
 		// Rellenamos el formulario
-		PO_LoginView.fillForm(driver, "user" + userId + "@email.com", "123456");
+		PO_LoginView.fillForm(driver, email, password);
 		// COmprobamos que entramos en la pagina privada de Alumno
-		PO_View.checkElement(driver, "text", "Esta es una zona privada la web");
+		//PO_View.checkElement(driver, "text", "Bienvenido a My SocialNetwork!");
+		SeleniumUtils.textoPresentePagina(driver, "Bienvenido a My SocialNetwork!");
+
 	}
-	
 
 	private void goToListUsers() {
-		// Pinchamos en la opción de menu de usuarios: //li[contains(@id,
-		// 'marks-menu')]/a
-		List<WebElement> elementos = PO_View.checkElement(driver, "free", "//li[contains(@id, 'users-menu')]/a");
-		elementos.get(0).click();
-		// Esperamos a aparezca la opción de ver usuarios: //a[contains(@href,
-		// 'mark/add')]
-		elementos = PO_View.checkElement(driver, "free", "//a[contains(@href, 'user/list')]");
-		// Pinchamos en agregar Nota.
-		elementos.get(0).click();
+		driver.findElement(By.xpath("//a[@href='/usuarios']")).click();
+	}
+	
+	private void disconect() {
+		driver.findElement(By.xpath("//a[@href='/logout']")).click();
+		//PO_View.checkKey(driver, "Usuario desconectado");
+		SeleniumUtils.textoPresentePagina(driver, "Usuario desconectado");
+
+		//PO_View.checkKey(driver, "Identificación de usuario");
+		SeleniumUtils.textoPresentePagina(driver, "Identificación de usuario");
+
 	}
 }
