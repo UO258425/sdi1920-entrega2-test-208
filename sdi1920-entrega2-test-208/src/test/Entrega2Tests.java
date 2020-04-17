@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -307,100 +308,100 @@ public class Entrega2Tests {
 		disconect();
 
 	}
-		
+
 	/**
-	 * Desde el listado de usuarios de la aplicación, enviar una invitación 
-	 * de amistad a un usuario. Comprobar que la solicitud de amistad aparece
-	 *  en el listado de invitaciones (punto siguiente). 
+	 * Desde el listado de usuarios de la aplicación, enviar una invitación de
+	 * amistad a un usuario. Comprobar que la solicitud de amistad aparece en el
+	 * listado de invitaciones (punto siguiente).
 	 */
 	@Test
 	public void PR15() {
 		loginAs("prueba1@prueba1", "prueba1");
-		
+
 		goToListUsers();
 		PO_PrivateView.goToPage(driver, 2);
-		
-		//envia invitacion a nombre7
-		driver.findElement(By.id("nombre7")).click(); 
+
+		// envia invitacion a nombre7
+		driver.findElement(By.id("nombre7")).click();
 		SeleniumUtils.textoPresentePagina(driver, "Invitacion enviada");
-		
+
 		gotoListInvitaciones();
-		
+
 		SeleniumUtils.textoPresentePagina(driver, "nombre7");
-		
+
 		disconect();
 	}
 
 	/**
-	 * Desde el listado de usuarios de la aplicación, enviar una
-	 *  invitación de amistad a un usuario al que ya le habíamos 
-	 *  enviado la invitación previamente. No debería dejarnos enviar
-	 *   la invitación, se podría ocultar el botón de enviar invitación 
-	 *   onotificar que ya había sido enviada previamente
+	 * Desde el listado de usuarios de la aplicación, enviar una invitación de
+	 * amistad a un usuario al que ya le habíamos enviado la invitación previamente.
+	 * No debería dejarnos enviar la invitación, se podría ocultar el botón de
+	 * enviar invitación onotificar que ya había sido enviada previamente
 	 */
 	@Test
 	public void PR16() {
 		loginAs("prueba1@prueba1", "prueba1");
-		
+
 		goToListUsers();
 		PO_PrivateView.goToPage(driver, 2);
-		
-		//envia invitacion a nombre7
-		driver.findElement(By.id("nombre7")).click(); 
+
+		// envia invitacion a nombre7
+		driver.findElement(By.id("nombre7")).click();
 		SeleniumUtils.textoPresentePagina(driver, "Error: ya hay una petición pendiente");
-		
+
 		disconect();
 	}
-	
+
 	/**
-	 * Mostrar  el  listado  de  invitaciones  de  amistad  recibidas. 
-	 *  Comprobar con  un  listado  que contenga varias invitaciones recibidas
+	 * Mostrar el listado de invitaciones de amistad recibidas. Comprobar con un
+	 * listado que contenga varias invitaciones recibidas
 	 */
 	@Test
 	public void PR17() {
 		loginAs("prueba1@prueba1", "prueba1");
-		
+
 		gotoListInvitaciones();
 
 		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(4, invitaciones.size());	
-		
+		assertEquals(4, invitaciones.size());
+
 		disconect();
 	}
-	
+
 	/**
-	 * Sobre  el  listado  de  invitaciones  recibidas.  Hacer  click  en  el  botón/enlace  
-	 * de  una  de  ellas  y comprobar que dicha solicitud desaparece del listado de invitaciones
+	 * Sobre el listado de invitaciones recibidas. Hacer click en el botón/enlace de
+	 * una de ellas y comprobar que dicha solicitud desaparece del listado de
+	 * invitaciones
 	 */
 	@Test
 	public void PR18() {
 		loginAs("prueba1@prueba1", "prueba1");
-		
+
 		gotoListInvitaciones();
 		driver.findElement(By.id("nombre7")).click();
 		SeleniumUtils.textoPresentePagina(driver, "Invitación aceptada");
 		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(3, invitaciones.size());	
-		
-	
+		assertEquals(3, invitaciones.size());
+
 		disconect();
 	}
-	
+
 	/**
-	 * Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene los amigos que deben ser.
+	 * Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene
+	 * los amigos que deben ser.
 	 */
 	@Test
 	public void PR19() {
 		loginAs("prueba1@prueba1", "prueba1");
-		
+
 		goToListFriends();
-		
+
 		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(6, invitaciones.size());
-		
+
 		disconect();
 	}
-	
+
 	/**
 	 * Intentar acceder sin estar autenticado a la opcion de listado de usuarios Se
 	 * debera volver al formulario de login
@@ -442,7 +443,8 @@ public class Entrega2Tests {
 
 	/**
 	 * Inicio de sesión con datos válidos.
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 *
 	 */
 	@Test
@@ -450,10 +452,10 @@ public class Entrega2Tests {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		// Rellenamos el formulario.
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
-		//TimeUnit.MILLISECONDS.sleep(500);
+		// TimeUnit.MILLISECONDS.sleep(500);
 		PO_View.checkElement(driver, "text", "nombre2");
 
-		//SeleniumUtils.textoPresentePagina(driver, "nombre2");
+		// SeleniumUtils.textoPresentePagina(driver, "nombre2");
 
 	}
 
@@ -469,10 +471,10 @@ public class Entrega2Tests {
 		SeleniumUtils.textoPresentePagina(driver, "Autenticación fallida");
 	}
 
-	
 	/**
 	 * Acceder a la lista de amigos de un usuario, que al menos tenga tres amigos.
-	 * @throws InterruptedException 
+	 * 
+	 * @throws InterruptedException
 	 *
 	 */
 	@Test
@@ -481,107 +483,111 @@ public class Entrega2Tests {
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
 		TimeUnit.MILLISECONDS.sleep(500);
 
-		//List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
-		 List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
+		// List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
+		List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
 
 		assertEquals(6, elements.size());
 
 	}
-	
+
 	/**
-	 * Acceder a la lista de amigos de un usuario, y realizar un filtrado para encontrar a 
-	 * un amigo concreto, el nombre a buscar debe coincidir con el de un amigo.
+	 * Acceder a la lista de amigos de un usuario, y realizar un filtrado para
+	 * encontrar a un amigo concreto, el nombre a buscar debe coincidir con el de un
+	 * amigo.
+	 * @throws InterruptedException 
 	 *
 	 */
 	@Test
-	public void PR26() {
+	public void PR26() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
-		
-		//PO_PrivateView.searchInUsersListCliente(driver, "nombre2");
-		
-		//WebElement toSearch = SeleniumUtils.EsperaCargaPaginaxpathUnElemento(driver, "//input", 5);
-		 List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//tbody/tr", 3);
-		 WebElement toSearch = elements.get(0);
-		 driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); 
+
+		// PO_PrivateView.searchInUsersListCliente(driver, "nombre2");
+
+		// WebElement toSearch = SeleniumUtils.EsperaCargaPaginaxpathUnElemento(driver,
+		// "//input", 5);
+		List<WebElement> elements = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//input", 3);
+		WebElement toSearch = elements.get(0);
+		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 		toSearch.click();
-		toSearch.clear();
+		toSearch = SeleniumUtils.EsperaCargaPaginaxpath(driver, "//input", 3).get(0);
+		TimeUnit.SECONDS.sleep(1);
 		toSearch.sendKeys("nombre2");
+		toSearch.sendKeys(Keys.ENTER);
 		
-		List<WebElement> users = PO_PrivateView.getAllElementsInList(driver);
+		
+		List<WebElement> users = driver.findElements(By.xpath("//tbody/tr"));
 		assertEquals(1, users.size());
 
 	}
-	
+
 	/**
-	 * Acceder  a  la  lista  de  mensajes  de  un  amigo “chat”,  
-	 * la  lista  debe  contener  almenos  tres mensajes.
-	 * @throws InterruptedException 
+	 * Acceder a la lista de mensajes de un amigo “chat”, la lista debe contener
+	 * almenos tres mensajes.
+	 * 
+	 * @throws InterruptedException
 	 *
 	 */
 	@Test
 	public void PR27() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
-		
-		SeleniumUtils.EsperaCargaPaginaxpathUnElemento(driver, "//a[text()='nombre2']/@href", 5).click();
 
-		 TimeUnit.SECONDS.sleep(2); //messages take a while to load
+		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
+
+		TimeUnit.SECONDS.sleep(2); // messages take a while to load
 
 		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(13, msg.size());
+		assertEquals(14, msg.size());
 
 	}
-	
-	
+
 	/**
-	 *Acceder a la lista de mensajes de un amigo“chat” 
-	 *y crear un nuevo mensaje, validar que el mensaje aparece en la lista de mensajes
+	 * Acceder a la lista de mensajes de un amigo“chat” y crear un nuevo mensaje,
+	 * validar que el mensaje aparece en la lista de mensajes
 	 *
 	 */
 	@Test
 	public void PR28() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
-		
+
 		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
-		 TimeUnit.SECONDS.sleep(1); //messages take a while to load
+		TimeUnit.SECONDS.sleep(1); // messages take a while to load
 
-		 PO_PrivateView.sendMessage(driver, "nuevo mensaje de prueba");
-		 TimeUnit.SECONDS.sleep(1); //messages take a while to load
+		PO_PrivateView.sendMessage(driver, "nuevo mensaje de prueba");
+		TimeUnit.SECONDS.sleep(1); // messages take a while to load
 
-		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
-		 
+		SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
+
 		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(15, msg.size());
 
 	}
-	
-	
+
 	/**
-	 *Acceder a la lista de mensajes de un amigo“chat” 
-	 *y crear un nuevo mensaje, validar que el mensaje aparece en la lista de mensajes
+	 * Acceder a la lista de mensajes de un amigo“chat” y crear un nuevo mensaje,
+	 * validar que el mensaje aparece en la lista de mensajes
 	 *
-	 *Se comprueba en el otro participante de la conversacion que el mensaje aparece
+	 * Se comprueba en el otro participante de la conversacion que el mensaje
+	 * aparece
 	 *
 	 */
 	@Test
 	public void PR32() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
-		
-		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
-		 TimeUnit.SECONDS.sleep(2); //messages take a while to load
 
-		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
-		 
+		driver.findElement(By.xpath("/html/body/div/div/table/tbody/tr[1]/td[1]/a")).click();
+		TimeUnit.SECONDS.sleep(2); // messages take a while to load
+
+		SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
+
 		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
 		assertEquals(15, msg.size());
 
 	}
-	
-	
-	
+
 	private void loginAs(String email, String password) {
 		driver.findElement(By.xpath("//a[@href='/login']")).click();
 		// Rellenamos el formulario
@@ -595,11 +601,11 @@ public class Entrega2Tests {
 	private void goToListUsers() {
 		driver.findElement(By.xpath("//a[@href='/usuarios']")).click();
 	}
-	
+
 	private void gotoListInvitaciones() {
 		driver.findElement(By.xpath("//a[@href='/invitaciones']")).click();
 	}
-	
+
 	private void goToListFriends() {
 		driver.findElement(By.xpath("//a[@href='/amigos']")).click();
 	}
