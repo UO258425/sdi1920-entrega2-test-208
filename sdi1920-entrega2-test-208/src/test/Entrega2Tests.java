@@ -307,7 +307,100 @@ public class Entrega2Tests {
 		disconect();
 
 	}
+		
+	/**
+	 * Desde el listado de usuarios de la aplicación, enviar una invitación 
+	 * de amistad a un usuario. Comprobar que la solicitud de amistad aparece
+	 *  en el listado de invitaciones (punto siguiente). 
+	 */
+	@Test
+	public void PR15() {
+		loginAs("prueba1@prueba1", "prueba1");
+		
+		goToListUsers();
+		PO_PrivateView.goToPage(driver, 2);
+		
+		//envia invitacion a nombre7
+		driver.findElement(By.xpath("/invitacion/enviar/5e9991e19315110378d714fc']")).click(); 
+		SeleniumUtils.textoPresentePagina(driver, "Invitacion enviada");
+		
+		gotoListInvitaciones();
+		
+		SeleniumUtils.textoPresentePagina(driver, "nombre7");
+		
+		disconect();
+	}
 
+	/**
+	 * Desde el listado de usuarios de la aplicación, enviar una
+	 *  invitación de amistad a un usuario al que ya le habíamos 
+	 *  enviado la invitación previamente. No debería dejarnos enviar
+	 *   la invitación, se podría ocultar el botón de enviar invitación 
+	 *   onotificar que ya había sido enviada previamente
+	 */
+	@Test
+	public void PR16() {
+		loginAs("prueba1@prueba1", "prueba1");
+		
+		goToListUsers();
+		PO_PrivateView.goToPage(driver, 2);
+		
+		//envia invitacion a nombre7
+		driver.findElement(By.xpath("/invitacion/enviar/5e9991e19315110378d714fc']")).click(); 
+		SeleniumUtils.textoPresentePagina(driver, "Error: ya hay una petición pendiente");
+		
+		disconect();
+	}
+	
+	/**
+	 * Mostrar  el  listado  de  invitaciones  de  amistad  recibidas. 
+	 *  Comprobar con  un  listado  que contenga varias invitaciones recibidas
+	 */
+	@Test
+	public void PR17() {
+		loginAs("prueba1@prueba1", "prueba1");
+		
+		gotoListInvitaciones();
+
+		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(4, invitaciones.size());	
+		
+		disconect();
+	}
+	
+	/**
+	 * Sobre  el  listado  de  invitaciones  recibidas.  Hacer  click  en  el  botón/enlace  
+	 * de  una  de  ellas  y comprobar que dicha solicitud desaparece del listado de invitaciones
+	 */
+	@Test
+	public void PR18() {
+		loginAs("prueba1@prueba1", "prueba1");
+		
+		gotoListInvitaciones();
+		driver.findElement(By.id("nombre7")).click();
+		SeleniumUtils.textoPresentePagina(driver, "Invitación aceptada");
+		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(3, invitaciones.size());	
+		
+	
+		disconect();
+	}
+	
+	/**
+	 * Mostrar el listado de amigos de un usuario. Comprobar que el listado contiene los amigos que deben ser.
+	 */
+	@Test
+	public void PR19() {
+		loginAs("prueba1@prueba1", "prueba1");
+		
+		goToListFriends();
+		
+		List<WebElement> invitaciones = PO_PrivateView.getAllElementsInList(driver);
+		assertEquals(6, invitaciones.size());
+		
+		disconect();
+	}
+	
 	/**
 	 * Intentar acceder sin estar autenticado a la opcion de listado de usuarios Se
 	 * debera volver al formulario de login
@@ -460,7 +553,7 @@ public class Entrega2Tests {
 		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
 		 
 		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(14, msg.size());
+		assertEquals(15, msg.size());
 
 	}
 	
@@ -473,7 +566,7 @@ public class Entrega2Tests {
 	 *
 	 */
 	@Test
-	public void PR29() throws InterruptedException {
+	public void PR32() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "prueba1");
 		
@@ -483,7 +576,7 @@ public class Entrega2Tests {
 		 SeleniumUtils.textoPresentePagina(driver, "nuevo mensaje de prueba");
 		 
 		List<WebElement> msg = PO_PrivateView.getAllElementsInList(driver);
-		assertEquals(14, msg.size());
+		assertEquals(15, msg.size());
 
 	}
 	
@@ -501,6 +594,14 @@ public class Entrega2Tests {
 
 	private void goToListUsers() {
 		driver.findElement(By.xpath("//a[@href='/usuarios']")).click();
+	}
+	
+	private void gotoListInvitaciones() {
+		driver.findElement(By.xpath("//a[@href='/invitaciones']")).click();
+	}
+	
+	private void goToListFriends() {
+		driver.findElement(By.xpath("//a[@href='/amigos']")).click();
 	}
 
 	private void disconect() {
