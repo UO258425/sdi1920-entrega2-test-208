@@ -463,13 +463,15 @@ public class Entrega2Tests {
 
 	/**
 	 * Inicio de sesión con datos inválidos (usuario no existente en la aplicación).
+	 * @throws InterruptedException 
 	 *
 	 */
 	@Test
-	public void PR24() {
+	public void PR24() throws InterruptedException {
 		driver.navigate().to("https://localhost:8081/cliente.html");
 		// Rellenamos el formulario.
 		PO_LoginView.fillClienteForm(driver, "prueba1@prueba1", "asdfasdf");
+		TimeUnit.MILLISECONDS.sleep(500);
 		SeleniumUtils.textoPresentePagina(driver, "Autenticación fallida");
 	}
 
